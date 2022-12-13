@@ -28,6 +28,9 @@
             <h1>{{ titulo }}</h1>
         </div>
             <form action="/autenticar" method="post">
+
+                <input type="hidden" name = "proximo" value = '{{proximo or url_for("inicio")}}'>
+
                 <p><label>Nome de usuário:</label>
                     <input class="form-control" type="text" name="usuario" required>
                 </p>

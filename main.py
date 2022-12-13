@@ -1,19 +1,31 @@
-from flask import Flask, render_template, request, redirect, session, flash
-from pessoa import Pessoa
+from flask import Flask, render_template, request, redirect, session, flash, url_for
+from model.pessoa import Pessoa
+from model.usuario import Usuario
 
 pessoa1 = Pessoa('Felipe', '30', 1.81)
 pessoa2 = Pessoa('Haiko', '17', 1.75)
 pessoa3 = Pessoa('Jean', '40', 1.85)
 
-
 lista = [pessoa1,pessoa2,pessoa3]
+
+usuario1 = Usuario('andre', 'andre_vitor', 'moredevs')
+usuario2 = Usuario('felipe', 'felipe_weiss', '12345')
+usuario3 = Usuario('larissa', 'larissa_sebold', '98765')
+
+usuarios = {
+
+    usuario1.nickname: usuario1,
+    usuario2.nickname: usuario2,
+    usuario3.nickname: usuario3
+}
 
 app = Flask(__name__)
 app.secret_key = 'moredevs'
 
 @app.route('/')
 def login():
-    return render_template('login.html', titulo = 'Login Usuario')
+    proximo = request.args.get('proximo')
+    return render_template('login.html', titulo = 'Login Usuario', proximo = proximo)
 
 @app.route('/listar')
 def inicio():
@@ -22,7 +34,7 @@ def inicio():
 @app.route('/novo')
 def novo():
     if 'usuario_logado' not in session or session['usuario_logado'] == None:
-        return redirect('/')
+        return redirect(url_for('login', proximo = url_for('novo')))
 
     return render_template('novo.html', titulo = 'Cadastro Pessoa')
 
@@ -36,25 +48,31 @@ def criar():
 
     lista.append(pessoa)
 
-    return redirect('/listar')
+    return redirect(url_for('listar'))
 
 @app.route('/autenticar', methods = ['post'])
 def autenticar():
-    if 'moredevs' == request.form['senha']:
 
-        session['usuario_logado'] = request.form['usuario']
+    if request.form['usuario'] in usuarios:
 
-        flash(session['usuario_logado'] + ' ' + 'Logado')
-        return redirect('/listar')
+        usuario = usuarios[request.form['usuario']]
+
+        if request.form['senha'] == usuario.senha:
+            session['usuario_logado'] = usuario.nickname
+
+            flash(usuario.nickname + ' ' + 'Logado')
+            proxima_pagina = request.form['proximo']
+        
+            return redirect(proxima_pagina)
 
     else:
-        flash('Senha incorreta')
-        return redirect('/')
+        flash('Usuario ou Senha inválidos')
+        return redirect(url_for('/'))
 
 @app.route('/logout')
 def logout():
     session['usuario_logado'] == None
     flash('Você foi desconectado')
-    return redirect('/')
+    return redirect(url_for('/'))
 
 app.run(debug=True)
