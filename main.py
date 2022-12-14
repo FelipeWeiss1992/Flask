@@ -9,7 +9,7 @@ pessoa3 = Pessoa('Jean', '40', 1.85)
 lista = [pessoa1,pessoa2,pessoa3]
 
 usuario1 = Usuario('andre', 'andre_vitor', 'moredevs')
-usuario2 = Usuario('felipe', 'felipe_weiss', '12345')
+usuario2 = Usuario('felipe', 'felipe_weiss', '123')
 usuario3 = Usuario('larissa', 'larissa_sebold', '98765')
 
 usuarios = {
@@ -48,7 +48,7 @@ def criar():
 
     lista.append(pessoa)
 
-    return redirect(url_for('listar'))
+    return redirect(url_for('inicio'))
 
 @app.route('/autenticar', methods = ['post'])
 def autenticar():
@@ -66,13 +66,14 @@ def autenticar():
             return redirect(proxima_pagina)
 
     else:
+
         flash('Usuario ou Senha inválidos')
-        return redirect(url_for('/'))
+        return redirect(url_for('login'))
 
 @app.route('/logout')
 def logout():
     session['usuario_logado'] == None
     flash('Você foi desconectado')
-    return redirect(url_for('/'))
+    return redirect(url_for('login'))
 
 app.run(debug=True)
