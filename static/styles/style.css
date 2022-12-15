@@ -50,3 +50,33 @@ footer{
     justify-content: center;
     align-items: center;
 }
+
+.editar{
+
+    width: 50px;
+}
+
+.deletar{
+
+    width: 50px;
+}
+
+.cor_editar{
+
+    color: yellow;
+}
+
+.cor_deletar{
+
+    color: red;
+}
+
+.cor_deletar:hover{
+
+    color: red;
+}
+
+.cor_editar:hover{
+
+    color: yellow;
+}
