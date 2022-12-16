@@ -43,7 +43,7 @@ def inicio():
 @app.route('/novo')
 def novo():
 
-    if 'usuario_logado' not in session or session['usuario_logado'] is None:
+    if 'usuario_logado' not in session or session['usuario_logado'] == None:
 
         return redirect(url_for('login', proximo = url_for('novo')))
 
@@ -79,15 +79,34 @@ def logout():
 
     return redirect(url_for('login'))
 
-@app.route('/editar/<int:id>', methods = ['put'])
+@app.route('/editar/<int:id>')
 def editar(id):
 
-    if 'usuario_logado' not in session or session['usuario_logado'] is None:
+    if 'usuario_logado' not in session or session['usuario_logado'] == None:
         return redirect(url_for('login', proximo = url_for('editar')))
         
     pessoa = Pessoas.query.filter_by(id=id).first()
     return render_template('editar.html', titulo = 'Editar Pessoa', pessoa = pessoa)
 
-@app.route('/atualizar', )
+@app.route('/atualizar', methods = ['post'])
 def atualizar():
-    pass
+    pessoa = Pessoas.query.filter_by(id=request.form['id']).first()
+    
+    pessoa.nome = request.form['nome']
+    pessoa.idade = request.form['idade']
+    pessoa.altura = request.form['altura']
+
+    db.session.add(pessoa)
+    db.session.commit()
+    return redirect(url_for('inicio'))
+
+@app.route('/Deletar/<int:id>')
+def deletar(id):
+    if 'usuario_logado' not in session or session['usuario_logado'] is None:
+        return redirect(url_for('login'))
+
+    Pessoas.query.filter_by(id=id).delete()
+    db.session.commit()
+    flash(f'Deletado com sucesso')
+    return redirect(url_for('inicio'))
+
