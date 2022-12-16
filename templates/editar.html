@@ -1,8 +1,10 @@
 {%extends 'template.html'%}
 {%block conteudo%}
     <form action="{{ url_for('atualizar') }}" method="post">
-    
+  
       <fieldset>
+
+        <input type="hidden" name ='id' value="{{pessoa.id}}">
 
         <div class="form-group">
             <label for="nome">Nome</label>
