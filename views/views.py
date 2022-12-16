@@ -91,6 +91,10 @@ def editar(id):
 @app.route('/atualizar', methods = ['post'])
 def atualizar():
     pessoa = Pessoas.query.filter_by(id=request.form['id']).first()
+
+    if pessoa:
+        flash('Pessoa já existente.')
+        return redirect(url_for('inicio'))
     
     pessoa.nome = request.form['nome']
     pessoa.idade = request.form['idade']

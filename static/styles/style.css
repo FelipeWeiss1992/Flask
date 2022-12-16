@@ -10,11 +10,25 @@ header{
     background-color: rgb(255, 255, 255);
 }
 
-header a {
+.btn-primary{
     width: 100px;
     margin: 15px;
     box-shadow: 10px 5px 15px rgb(53, 53, 247);
 }
+.btn-info{
+
+    width: 100px;
+    margin: 15px;
+    box-shadow: 10px 5px 15px rgb(30, 197, 230);
+
+}
+
+.nav-item3{
+
+    
+
+}
+
 .btn-danger{
 
     width: 100px;
