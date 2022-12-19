@@ -6,12 +6,12 @@ from models.usuarios import Usuarios
 @app.route('/')
 def login():
 
-    lista = Pessoas.query.order_by(Pessoas.id)
+    proximo = request.args.get('proximo')
 
-    return render_template('login.html', titulo = 'Login Usuario', pessoas = lista)
+    return render_template('login.html',titulo = 'Login Usuario', proximo=proximo)
 
 @app.route('/autenticar', methods=['POST'])
-def autenticar():
+def autenticar():   
 
     usuario = Usuarios.query.filter_by(nickname=request.form['usuario']).first()
     if usuario:
@@ -29,7 +29,7 @@ def autenticar():
 
     else:
         flash('Usuário ou Senha incorretos. Tente novamente')
-        #dinamizando url
+        
 
         return redirect(url_for('login'))
 
@@ -73,7 +73,7 @@ def criar():
 @app.route('/logout')
 def logout():
 
-    session['usuario_logado'] == None
+    session['usuario_logado'] = None
 
     flash('Você foi desconectado')  
 
@@ -90,12 +90,9 @@ def editar(id):
 
 @app.route('/atualizar', methods = ['post'])
 def atualizar():
+
     pessoa = Pessoas.query.filter_by(id=request.form['id']).first()
 
-    if pessoa:
-        flash('Pessoa já existente.')
-        return redirect(url_for('inicio'))
-    
     pessoa.nome = request.form['nome']
     pessoa.idade = request.form['idade']
     pessoa.altura = request.form['altura']
